@@ -13,12 +13,14 @@ spec:
         app: hello-world
     spec:
       containers:
-        - name: hello-world
-          image: 807801079910.dkr.ecr.eu-central-1.amazonaws.com/hello-world:latest
-          # Image that will be used to containers in the cluster
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 8080
+      - name: hello-world
+        image: 807801079910.dkr.ecr.eu-central-1.amazonaws.com/hello-world:latest
+        # Image that will be used to containers in the cluster
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: ecr-credentials
 # The port that the container is running on in the cluster
 
 ---
@@ -31,7 +33,7 @@ spec:
   selector:
     app: hello-world
   ports:
-    - protocol: "TCP"
-      port: 8080
-      targetPort: 8080
+  - protocol: "TCP"
+    port: 8080
+    targetPort: 8080
   type: NodePort
