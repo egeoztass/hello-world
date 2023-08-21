@@ -2,11 +2,14 @@ apiVersion: apps/v1
 kind: Deployment # Kubernetes resource kind we are creating
 metadata:
   name: hello-world
+  labels:
+    application: "DockerDemo"
+    tier: "backend"
 spec:
   selector:
     matchLabels:
       app: hello-world
-  replicas: 2 # Number of replicas that will be created for this deployment
+  replicas: 1 # Number of replicas that will be created for this deployment
   template:
     metadata:
       labels:
@@ -18,22 +21,16 @@ spec:
         # Image that will be used to containers in the cluster
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 8080
+        - name: web
+          containerPort: 8080
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: "512Mi"
+          requests:
+            cpu: 20m
+            memory: "128Mi"
       imagePullSecrets:
       - name: ecr-credentials
-# The port that the container is running on in the cluster
 
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: hello-worldsvc
-spec:
-  selector:
-    app: hello-world
-  ports:
-  - protocol: "TCP"
-    port: 8080
-    targetPort: 8080
-  type: NodePort
