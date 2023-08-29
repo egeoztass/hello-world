@@ -1,7 +1,8 @@
 apiVersion: apps/v1
-kind: Deployment # Kubernetes resource kind we are creating
+kind: Deployment
 metadata:
   name: hello-world
+  namespace: default  # Add the desired namespace here
   labels:
     application: "DockerDemo"
     tier: "backend"
@@ -9,7 +10,7 @@ spec:
   selector:
     matchLabels:
       app: hello-world
-  replicas: 1 # Number of replicas that will be created for this deployment
+  replicas: 1
   template:
     metadata:
       labels:
@@ -18,7 +19,6 @@ spec:
       containers:
       - name: hello-world
         image: 807801079910.dkr.ecr.eu-central-1.amazonaws.com/hello-world:latest
-        # Image that will be used to containers in the cluster
         imagePullPolicy: IfNotPresent
         ports:
         - name: web
@@ -33,4 +33,3 @@ spec:
             memory: "128Mi"
       imagePullSecrets:
       - name: ecr-credentials
-
